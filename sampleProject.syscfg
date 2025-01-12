@@ -1,0 +1,43 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "TM4C129x" --part "TM4C1294NCPDT" --package "128 Pin QFP|32x32"
+ * @v2CliArgs --device "TM4C1294NCPDT" --package "TQFP (PDT)"
+ * @versions {"tool":"1.21.0+3721"}
+ */
+
+/**
+ * These are the peripherals and settings in this configuration
+ */
+const iGPIO1        = scripting.addPeripheral("GPIO");
+iGPIO1["0"].pu_pd   = "pu";
+iGPIO1["0"].io      = "output";
+iGPIO1["0"].$assign = "PN0";
+iGPIO1.$name        = "MyGPIO1";
+const iTimer1       = scripting.addPeripheral("Timer");
+iTimer1.$name       = "baseTimer";
+const iTimer2       = scripting.addPeripheral("Timer");
+iTimer2.$name       = "MyTimer1";
+const iUART1        = scripting.addPeripheral("UART");
+iUART1.$name        = "virtualComPort";
+iUART1.$assign      = "UART0";
+iUART1.DCD.$used    = false;
+iUART1.DTR.$used    = false;
+iUART1.CTS.$used    = false;
+iUART1.DSR.$used    = false;
+iUART1.RTS.$used    = false;
+iUART1.RI.$used     = false;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+iTimer1.$suggestSolution      = "Timer1";
+iTimer1.CCP0.$suggestSolution = "PA2";
+iTimer1.CCP1.$suggestSolution = "PA3";
+iTimer2.$suggestSolution      = "Timer0";
+iTimer2.CCP0.$suggestSolution = "PD0";
+iTimer2.CCP1.$suggestSolution = "PD1";
+iUART1.RX.$suggestSolution    = "PA0";
+iUART1.TX.$suggestSolution    = "PA1";
