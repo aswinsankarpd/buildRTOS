@@ -6,6 +6,7 @@
 
 #include "systemInit.h"
 #include "hal_gpio.h"
+#include "hal_timer.h"
 
 int main(void)
 {
@@ -15,6 +16,8 @@ int main(void)
 
     while(1)
     {
+        uartSendBlocking("Hello");
 
+        delay(1);
     }
 }
