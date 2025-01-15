@@ -9,15 +9,15 @@
  *
  */
 #include "commonIncludes.h"
+#include "interrupt.h"
 
-#define NUM_OF_THREADS      10
+#define NUM_OF_THREADS      3
 #define THREAD_STACK_SIZE   100
-typedef struct
-{
-    int32_t * stackPtr;
-    struct sTaskCntrlBlock_t * nextPtr;
-}sTaskCntrlBlock_t;
 
+typedef struct sTaskCntrlBlock_t {
+    int32_t *stackPtr;
+    struct sTaskCntrlBlock_t *nextPtr;
+} sTaskCntrlBlock_t;
 
 sTaskCntrlBlock_t tcbs[NUM_OF_THREADS];
 
@@ -54,4 +54,25 @@ void osKernalStackInit(uint8_t threadNumber)
 
     //<< setting the value in tcbs
     tcbs[threadNumber].stackPtr = &TCB_STACK[threadNumber][THREAD_STACK_SIZE - 16];
+}
+
+uint8_t osKernalAddThreads(void(*task0)(void), void(*task1)(void), void(*task2)(void))
+{
+    IntMasterDisable();
+
+    tcbs[0].nextPtr = &tcbs[1];
+    osKernalStackInit(0);
+    TCB_STACK[0][THREAD_STACK_SIZE-2] = (int32_t)task0;
+
+    tcbs[1].nextPtr = &tcbs[2];
+    osKernalStackInit(1);
+    TCB_STACK[1][THREAD_STACK_SIZE-2] = (int32_t)task1;
+
+    tcbs[2].nextPtr = &tcbs[0];
+    osKernalStackInit(2);
+    TCB_STACK[2][THREAD_STACK_SIZE-2] = (int32_t)task2;
+
+    IntMasterEnable();
+
+    return 1;
 }
